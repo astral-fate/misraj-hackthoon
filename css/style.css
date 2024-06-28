@@ -1,0 +1,46 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+ 
+}
+
+.container-fluid {
+    direction: rtl;
+    text-align: right;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.custom-settings-icon,
+.security-icon,
+.formats-icon,
+.easy-icon {
+    width: 57px;
+    height: 57px;
+}
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.icon-bg {
+    background: #1575BB;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+.custom-icon-part,
+.security-icon-part {
+    background: #D91A5D;
+    height: 20px;
+    width: 20px;
+}
