@@ -1,0 +1,10 @@
+{
+    "require": {
+        "smalot/pdfparser": "^2.10",
+        "phpoffice/phpword": "^1.2",
+        "setasign/fpdi": "^2.6",
+        "tecnickcom/tcpdf": "^6.7",
+        "spatie/pdf-to-text": "^1.52",
+        "thiagoalessio/tesseract_ocr": "^2.13"
+    }
+}

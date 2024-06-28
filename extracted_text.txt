@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بصير</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="container-fluid text-center py-5" dir="rtl">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1>بصير</h1>
+                <br>
+                <p>من أجل تجربة تعليمية شاملة للمكفوفين</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capture Image Section -->
+    <div class="container text-center my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <button onclick="startCamera()" class="btn btn-primary mb-3">Start Camera</button>
+                <video id="video" width="640" height="480" autoplay></video>
+                <canvas id="canvas"></canvas>
+                <img id="result" width="640" height="480">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white text-center py-4">
+        <p>2024 All rights reserved</p>
+    </footer>
+
+    <script>
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext('2d');
+        let resultImg = document.getElementById('result');
+
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                    // Start processing frames after camera starts
+                    setInterval(captureFrame, 2000); // Adjust the interval as needed
+                })
+                .catch(err => {
+                    console.error("Error accessing camera: ", err);
+                });
+        }
+
+        function captureFrame() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(blob => {
+                let formData = new FormData();
+                formData.append('frame', blob);
+
+                fetch('http://localhost:5000/detect', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    let url = URL.createObjectURL(blob);
+                    resultImg.src = url;
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                });
+            }, 'image/jpeg');
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
